@@ -1,8 +1,15 @@
 <template>
   <div id="app">
     <input type="text" v-model="link" />
-    <button @click.prevent="send()">send</button><br />
-    <a :href="this.info">{{ info }}</a>
+    <button @click.prevent="send()">Generate</button><br />
+
+    <label v-if="this.shortLink" for="short-link">Короткая ссылка: </label>
+    <a :href="this.shortLink" id="short-link" target="_blank">{{ shortLink }}</a
+    ><br />
+    <label v-if="this.statsLink" for="stats-link">Статистика: </label>
+    <a :href="this.statsLink" id="stats-link" target="_blank">{{
+      statsLink
+    }}</a>
   </div>
 </template>
 
@@ -14,7 +21,8 @@ export default {
   data() {
     return {
       link: "",
-      info: "",
+      shortLink: "",
+      statsLink: "",
     };
   },
   mounted() {},
@@ -27,7 +35,8 @@ export default {
         .post(host, data)
         .then((response) => {
           console.log(response);
-          this.info = response.data.short_url;
+          this.shortLink = response.data.short_url;
+          this.statsLink = this.shortLink + "/stats";
         })
         .catch((error) => {
           console.log(error);
